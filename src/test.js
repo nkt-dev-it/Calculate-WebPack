@@ -1,5 +1,5 @@
 function print(data) {
-    console.log(data);
+
 }
 
 function getDate() {

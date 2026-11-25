@@ -1,14 +1,12 @@
 import "./style.css";
-// import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
-let current = "0"; // число на экране прямо сейчас
-let previous = null; // число до того, как нажали операцию
-let operation = null; // выбранная операция
-let shouldReset = false; // true = следующая цифра начнёт новое число // false = цифра должна дописаться к текущему числу
+let current = "0";
+let previous = null;
+let operation = null;
+let shouldReset = false;
 
 
 const display = document.getElementById("display");
  
-// Функция, которая обновляет текст на экране
 function updateDisplay() {
     display.textContent = current;
 
@@ -23,10 +21,7 @@ function updateDisplay() {
     }
 }
 
-// ─── ФУНКЦИИ
-// ВВОД ЦИФР или запятой
 function pressDigit(value) {
-    // Если только что нажали операцию — начинаем новое число
     if (shouldReset) {
 
         if (value === ".") {
@@ -40,17 +35,14 @@ function pressDigit(value) {
         return;
     }
 
-    // Нельзя поставить вторую точку
     if (value === "." && current.includes(".")) return;
 
-    // Если на экране 0 и нажали точку
     if (value === "." && current === "0") {
         current = "0.";
         updateDisplay();
         return;
     }
 
-    // Обычный ввод цифр
     if (current === "0") {
         current = value;
     } else {
@@ -60,7 +52,6 @@ function pressDigit(value) {
     updateDisplay();
 }
 
-// Нажата кнопка AC — сбрасываем всё до заводских настроек
 function pressClear() {
     current = "0";
     previous = null;
@@ -69,35 +60,27 @@ function pressClear() {
     updateDisplay();
 }
 
-// +/- — меняем знак числа
 function pressSign() {
-    current = String(-parseFloat(current)); // parseFloat(current) - возвращает число, -  знак, меняет число (было -25, будет -(-25), значит +25) и обратно в строку
+    current = String(-parseFloat(current));
     updateDisplay();
 }
  
-// Нажата кнопка % — делим на 100
 function pressPercent() {
     current = String(parseFloat(current)/100);
     updateDisplay();
 }
- 
-// Пользователь нажал одну из операций (+, -, ×, ÷)
+
 function pressOperation(op) {
-    previous = parseFloat(current); // число на экране
-    operation = op; // (+, -, ×, ÷)
-    shouldReset = true; // после операции вводим новое число
+    previous = parseFloat(current);
+    operation = op;
+    shouldReset = true;
 }
 
-// Результат
 function pressEquals() {
-    // если ничего не нажато или 0, то... ничего
     if (!operation || previous === null) return;
-
-    // выражение:
     const a = previous;
     const b = parseFloat(current);
-    let result; // здесь пока нет значения, потому что нет никаких расчетов
-    // console.log(result);
+    let result;
 
     if (operation === "+") result = a + b;
     if (operation === "-") result = a - b;
@@ -114,7 +97,6 @@ function pressEquals() {
     result = a / b;
 }
 
-    // Округляем до 10 знаков
     current = String(
         parseFloat(
             result.toFixed(10)
@@ -127,9 +109,6 @@ function pressEquals() {
 
     updateDisplay();
 }
-
-// ─── addEventListener
-// На каждую кнопку свой обработчик клика
  
 document.getElementById('btn-clear').addEventListener('click', pressClear);
  
